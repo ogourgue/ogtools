@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from gmsh2telemac import load_msh
-from curvature import gaussian_curvature_p1
+from curvature import compute_mini_cloud, export_mini_cloud, \
+                      import_mini_cloud, gaussian_curvature_p1
 
 
 # grid
@@ -11,8 +12,17 @@ x, y, tri, bnd, physical = load_msh('../data/circle_100.msh')
 # data
 f = np.exp(-(x * x + y * y))
 
+# compute list of mini-clouds
+cloud = compute_mini_cloud(x, y, tri)
+
+# export list of mini-clouds
+export_mini_cloud(cloud, 'cloud.bin')
+
+# import list of mini-clouds
+cloud = import_mini_cloud('cloud.bin')
+
 # numerical curvature
-r = gaussian_curvature_p1(x, y, f, tri)
+r = gaussian_curvature_p1(x, y, f, tri, cloud)
 
 # analytical curvature
 fx = -2. * x * f

@@ -1,11 +1,10 @@
 # author: O. Gourgue (University of Antwerp, Belgium)
 
 import numpy as np
+import scipy.linalg
 
 
-def gaussian_curvature_p1(x, y, f, tri):
-
-  import scipy.linalg
+def gaussian_curvature_p1(x, y, f, tri, cloud = None):
 
   """
   calculate the local gaussian curvature of the P1 finite element field f(x, y) on the grid defined by x, y (triangle vertex coordinates) and tri (connectivity table), based on calculation of local quadratic approximation
@@ -26,36 +25,11 @@ def gaussian_curvature_p1(x, y, f, tri):
   # number of nodes
   nnode = len(x)
 
-  # definition: mini-cloud
-  # for each node, list of neighboring nodes sharing at least one triangle
+  # if list of mini-clouds not provided:
+  if cloud is None:
 
-  # initialize list of mini-clouds
-  cloud = [None] * nnode
-  for i in range(nnode):
-    cloud[i] = []
-
-
-  #######################
-  # compute mini-clouds #
-  #######################
-
-  # for each triangle
-  for i in range(ntri):
-
-    # for each triangle vertex
-    for j in tri[i, :]:
-
-      # for each triangle vertex
-      for k in tri[i, :]:
-
-        # add node j in mini-cloud k if not already in
-        if j not in cloud[k]:
-          cloud[k].append(j)
-
-
-  ##########################################################
-  # compute quadratic approximation and gaussian curvature #
-  ##########################################################
+    # compute list of mini-clouds
+    cloud = compute_mini_cloud(x, y, tri)
 
   # initialize gaussian curvature
   k = np.zeros(nnode)
@@ -101,6 +75,111 @@ def gaussian_curvature_p1(x, y, f, tri):
 
   # return gaussian curvature
   return k
+
+
+def compute_mini_cloud(x, y, tri):
+
+  """
+  computes mini-cloud of each node of a trinagular grid (the mini-cloud of a node is the list of all neighboring nodes sharing at least one triangle with it)
+
+  input:
+  x: array of shape (n)
+  y: array of shape (n)
+  tri: array of shape (m, 3)
+
+  output:
+  cloud: list of n sub-lists (each sub-list has differents lengths)
+  """
+
+  # number of triangles
+  ntri = len(tri)
+
+  # number of nodes
+  nnode = len(x)
+
+  # initialize list of mini-clouds
+  cloud = [None] * nnode
+  for i in range(nnode):
+    cloud[i] = []
+
+  # for each triangle
+  for i in range(ntri):
+
+    # for each triangle vertex
+    for j in tri[i, :]:
+
+      # for each triangle vertex
+      for k in tri[i, :]:
+
+        # add node j in mini-cloud k if not already in
+        if j not in cloud[k]:
+          cloud[k].append(j)
+
+  return cloud
+
+
+def export_mini_cloud(cloud, filename):
+
+  """
+  export list of mini-clouds
+
+  input:
+  cloud: list of n sub-lists (each sub-list has differents lengths)
+  filename: binary file name
+  """
+
+  # open file
+  file = open(filename, 'w')
+
+  # number of mini-clouds
+  np.array(len(cloud), dtype = int).tofile(file)
+
+  # for each mini-cloud
+  for i in range(len(cloud)):
+
+    # number of nodes
+    np.array(len(cloud[i]), dtype = int).tofile(file)
+
+    # node indices
+    np.array(cloud[i], dtype = int).tofile(file)
+
+  # close file
+  file.close()
+
+
+def import_mini_cloud(filename):
+
+  """
+  import list of mini-clouds
+
+  input:
+  cloud: list of n sub-lists (each sub-list has differents lengths)
+  filename: binary file name
+  """
+
+  # open file
+  file = open(filename, 'r')
+
+  # number of mini-clouds
+  ncloud = np.fromfile(file, dtype = int, count = 1)[0]
+
+  # initialize list of mini-clouds
+  cloud = [None] * ncloud
+  for i in range(ncloud):
+    cloud[i] = []
+
+  # for each mini-cloud
+  for i in range(ncloud):
+
+    # number of nodes
+    n = np.fromfile(file, dtype = int, count = 1)[0]
+
+    # node indices
+    cloud[i] = list(np.fromfile(file, dtype = int, count = n))
+
+  # close file
+  file.close()
+
 
 
 ############################################
