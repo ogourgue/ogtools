@@ -9,12 +9,17 @@ def projection_p1(x, y, tri, X, Y, F):
 
   """
   project the data F(X, Y) on a P1 finite element field on the grid defined by x, y (tria ngle vertex coordinates) and tri (connectivity table)
+
+  input:
   x: array of shape (n)
   y: array of shape (n)
   tri: array of shape (m, 3)
-  X: array of size (N)
-  Y: array of size (N)
-  F: array of size (N)
+  X: array of shape (N)
+  Y: array of shape (N)
+  F: array of shape (N)
+
+  output:
+  f: array of shape (n)
   """
 
   # test input data
