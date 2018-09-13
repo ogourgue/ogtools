@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from gmsh2telemac import load_msh
-from curvature import compute_mini_cloud, export_mini_cloud, \
-                      import_mini_cloud, gaussian_curvature_p1
+from mini_cloud import compute_mini_cloud, export_mini_cloud, import_mini_cloud
+from curvature import curvature_p1
 
 
 # grid
@@ -22,7 +22,7 @@ export_mini_cloud(cloud, 'cloud.bin')
 cloud = import_mini_cloud('cloud.bin')
 
 # numerical curvature
-r = gaussian_curvature_p1(x, y, f, tri, cloud)
+k = curvature_p1(x, y, f, tri, cloud)
 
 # analytical curvature
 fx = -2. * x * f
@@ -34,7 +34,7 @@ k = (fxx * fyy - fxy * fxy) / (1. + fx * fx + fy * fy) ** 2.
 
 # figure numerical curvature
 plt.figure()
-plt.tripcolor(x, y, tri, r, vmin = 1., vmax = 3.5)
+plt.tripcolor(x, y, tri, k, vmin = 1., vmax = 3.5)
 plt.colorbar()
 plt.axis('scaled')
 plt.savefig('curvature_numerical.png', dpi = 300)

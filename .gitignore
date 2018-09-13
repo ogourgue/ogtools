@@ -2,3 +2,4 @@
 curvature.pyc
 *.pyc
 examples/example_curvature_p1/cloud.bin
+*.png
