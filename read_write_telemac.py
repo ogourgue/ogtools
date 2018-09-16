@@ -31,6 +31,23 @@ class Telemac(object):
 
   def import_header(self):
 
+    """
+    imports header of telemac file
+    class attributes:
+      - times: list of time steps
+      - vnames: list of variable names
+      - vunits: list of variable units
+      - float_type
+      - float_size
+      - nelem: number of grid triangles
+      - npoin: number of grid nodes
+      - ndp
+      - ikle: connectivity table (beware, first triangle id is 1, not 0)
+      - ipobo
+      - x: array with x-coordinates of grid nodes
+      - y: array with y-coordinates of grid nodes
+    """
+
     # class attributes
     slf = self.slf
 
@@ -63,6 +80,17 @@ class Telemac(object):
   ############################################################################
 
   def import_data(self, vname = None, step = None):
+
+    """
+    imports data
+    input:
+      - vname: list of variable names (string accepted if only 1 variable)
+      - step: list of time steps (integer accepted if only 1 time step; step = -1 accepted if only last time step)
+    output:
+      - v: (list of) array(s) with data
+           --> only a list if several variables (each item of the list corresponds to one variable)
+           --> array of shape (number of grid nodes, number of time steps)
+    """
 
     # class attributes
     slf = self.slf
