@@ -46,7 +46,7 @@ def compute_mini_cloud(x, y, tri):
 
 ################################################################################
 
-def compute_mini_cloud_radius(x, y, tri, r):
+def compute_mini_cloud_radius(x, y, r, nmax = None):
 
   """
   computes mini-cloud of each node of a trinagular grid, as the list of all nodes in a certain radius
@@ -55,21 +55,27 @@ def compute_mini_cloud_radius(x, y, tri, r):
   x: array of shape (n)
   y: array of shape (n)
   tri: array of shape (m, 3)
+  nmax: maximum number of nodes per mini-cloud (random selection if necessary)
 
   output:
   cloud: list of n sub-lists (each sub-list has differents lengths)
   """
 
-  # number of triangles
-  ntri = len(tri)
-
   # number of nodes
   nnode = len(x)
 
+  # integer type
+  if nnode <= 127:
+    dtype = np.int8
+  elif nnode <= 32767:
+    dtype = np.int16
+  elif nnode <= 2147483647:
+    dtype = np.int32
+  else:
+    dtype = np.int64
+
   # initialize list of mini-clouds
   cloud = [None] * nnode
-  for i in range(nnode):
-    cloud[i] = []
 
   # for each node
   for i in range(nnode):
@@ -84,13 +90,17 @@ def compute_mini_cloud_radius(x, y, tri, r):
     tmp_y = y[tmp_j]
 
     # data within circle of radius r
-    d2 = (x_tmp - x0) * (x_tmp - x0) + (y_tmp - y0) * (y_tmp - y0)
-    j = tmp_j[d2 <= r * r]
+    d2 = np.zeros(nnode)
+    d2[tmp_j] = (tmp_x - x0) * (tmp_x - x0) + (tmp_y - y0) * (tmp_y - y0)
+    tmp_j *= (d2 <= r * r)
+    j = np.array(np.argwhere(tmp_j).reshape(-1), dtype = dtype)
+
+    # random selection if too many nodes in the mini-cloud
+    if len(j) > nmax and nmax is not None:
+      j = j[np.random.randint(0, len(j), nmax)]
 
     # add node indices to mini-cloud
     cloud[i] = j
-
-  print cloud
 
   return cloud
 
@@ -107,20 +117,33 @@ def export_mini_cloud(cloud, filename):
   filename: binary file name
   """
 
+  # number of mini-clouds
+  ncloud = len(cloud)
+
+  # integer type
+  if ncloud <= 127:
+    dtype = np.int8
+  elif ncloud <= 32767:
+    dtype = np.int16
+  elif ncloud <= 2147483647:
+    dtype = np.int32
+  else:
+    dtype = np.int64
+
   # open file
   file = open(filename, 'w')
 
   # number of mini-clouds
-  np.array(len(cloud), dtype = int).tofile(file)
+  np.array(ncloud, dtype = int).tofile(file)
 
   # for each mini-cloud
-  for i in range(len(cloud)):
+  for i in range(ncloud):
 
     # number of nodes
-    np.array(len(cloud[i]), dtype = int).tofile(file)
+    np.array(len(cloud[i]), dtype = dtype).tofile(file)
 
     # node indices
-    np.array(cloud[i], dtype = int).tofile(file)
+    np.array(cloud[i], dtype = dtype).tofile(file)
 
   # close file
   file.close()
@@ -144,6 +167,16 @@ def import_mini_cloud(filename):
   # number of mini-clouds
   ncloud = np.fromfile(file, dtype = int, count = 1)[0]
 
+  # integer type
+  if ncloud <= 127:
+    dtype = np.int8
+  elif ncloud <= 32767:
+    dtype = np.int16
+  elif ncloud <= 2147483647:
+    dtype = np.int32
+  else:
+    dtype = np.int64
+
   # initialize list of mini-clouds
   cloud = [None] * ncloud
   for i in range(ncloud):
@@ -153,10 +186,12 @@ def import_mini_cloud(filename):
   for i in range(ncloud):
 
     # number of nodes
-    n = np.fromfile(file, dtype = int, count = 1)[0]
+    n = np.fromfile(file, dtype = dtype, count = 1)[0]
 
     # node indices
-    cloud[i] = list(np.fromfile(file, dtype = int, count = n))
+    cloud[i] = np.fromfile(file, dtype = dtype, count = n)
 
   # close file
   file.close()
+
+  return cloud
