@@ -1,4 +1,7 @@
+# author: O. Gourgue (University of Antwerp, Belgium)
+
 import numpy as np
+import sys
 
 import ppmodules.selafin_io_pp as pps
 
@@ -32,7 +35,7 @@ class Telemac(object):
   def import_header(self):
 
     """
-    imports header of telemac file
+    import header of telemac file
     class attributes:
       - times: list of time steps
       - vnames: list of variable names
@@ -82,14 +85,14 @@ class Telemac(object):
   def import_data(self, vname = None, step = None):
 
     """
-    imports data
+    import data of telemac file
     input:
-      - vname: list of variable names (string accepted if only 1 variable)
-      - step: list of time steps (integer accepted if only 1 time step; step = -1 accepted if only last time step)
+      - vname: (list of) variable name(s)
+      - step: (list of) time step(s) - step = -1 for last time step
     output:
       - v: (list of) array(s) with data
-           --> only a list if several variables (each item of the list corresponds to one variable)
-           --> array of shape (number of grid nodes, number of time steps)
+           --> list if several variables (each item is a different variable)
+           --> array shape = (number of grid nodes, number of time steps)
     """
 
     # class attributes
@@ -151,3 +154,112 @@ class Telemac(object):
 
     # return data
     return v
+
+
+  ############################################################################
+
+  def export_header(self, vnames, vunits, nelem, npoin, ikle, ipobo, x, y, \
+                    ndp = 3, float_type = 'f', float_size = 4):
+
+    """
+    export header in telemac file
+    input:
+      - vnames: list of variable names
+      - vunits: list of variable units
+      - nelem: number of grid triangles
+      - npoin: number of grid nodes
+      - ikle: connectivity table (beware, first triangle id is 1, not 0)
+      - ipobo
+      - x: array with x-coordinates of grid nodes
+      - y: array with y-coordinates of grid nodes
+      - float_type (optional)
+      - float_size (optional)
+      - ndp (optional)
+    """
+
+    # class attributes
+    slf = self.slf
+
+    # write header
+    slf.setPrecision(float_type, float_size)
+    slf.setTitle('')
+    slf.setVarNames(vnames)
+    slf.setVarUnits(vunits)
+    slf.setIPARAM([1, 0, 0, 0, 0, 0, 0, 0, 0, 1])
+    slf.setMesh(nelem, npoin, ndp, ikle, ipobo, x, y)
+    slf.writeHeader()
+
+    # class attributes
+    self.vnames = vnames
+    self.vunits = vunits
+    self.float_type = float_type
+    self.float_size = float_size
+    self.nelem = nelem
+    self.npoin = npoin
+    self.ndp = ndp
+    self.ikle = ikle
+    self.ipobo = ipobo
+    self.x = x
+    self.y = y
+
+
+  ############################################################################
+
+  def export_data(self, times, v):
+
+    """
+    export data in telemac file
+    input:
+      - times: (list of) time step(s)
+      - v: (list of) array(s) with data
+           --> list if several variables (each item is a different variable)
+           --> array shape = (number of grid nodes, number of time steps)
+    """
+
+    # class attributes
+    slf = self.slf
+    npoin = self.npoin
+
+    # number of variables
+    if type(v) is list:
+      nv = len(v)
+    else:
+      nv = 1
+
+    # number of time steps
+    if type(times) is not list:
+      times = [times]
+    nt = len(times)
+
+    # check number of time steps
+    if nv == 1:
+      if (nt == 1 and v.ndim > 1) or (nt > 1 and v.shape[1] != nt):
+        print 'number of time steps do not match in times and v'
+        sys.exit()
+    else:
+      if (nt == 1 and v[0].ndim > 1) or (nt > 1 and v[0].shape[1] != nt):
+        print 'number of time steps do not match in times and v'
+        sys.exit()
+
+    # reshape data
+    tmp = np.zeros((nt, nv, npoin))
+    if nv == 1:
+      tmp[:, 0, :] = v.T
+    else:
+      for i in range(nv):
+        tmp[:, i, :] = v[i].T
+
+    # export data
+    for i in range(nt):
+      slf.writeVariables(times[i], tmp[i, :, :])
+
+
+  ############################################################################
+
+  def close(self):
+
+    # class attributes
+    slf = self.slf
+
+    # close file
+    slf.close()
