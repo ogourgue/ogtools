@@ -158,7 +158,7 @@ class Telemac(object):
 
   ############################################################################
 
-  def export_header(self, vnames, vunits, nelem, npoin, ikle, ipobo, x, y, \
+  def export_header(self, vnames, vunits, ikle, ipobo, x, y, \
                     ndp = 3, float_type = 'f', float_size = 4):
 
     """
@@ -179,6 +179,12 @@ class Telemac(object):
 
     # class attributes
     slf = self.slf
+
+    # number of triangles
+    nelem = ikle.shape[0]
+
+    # number of nodes
+    npoin = len(x)
 
     # write header
     slf.setPrecision(float_type, float_size)
@@ -218,6 +224,8 @@ class Telemac(object):
 
     # class attributes
     slf = self.slf
+    vnames = self.vnames
+    vunits = self.vunits
     npoin = self.npoin
 
     # number of variables
@@ -225,6 +233,11 @@ class Telemac(object):
       nv = len(v)
     else:
       nv = 1
+
+    # check number of variables
+    if nv != len(vnames) or nv != len(vunits) or len(vnames) != len(vunits):
+      print 'number of variables do not match in v, vnames and vunits'
+      sys.exit()
 
     # number of time steps
     if type(times) is not list:
