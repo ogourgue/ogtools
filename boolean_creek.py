@@ -27,7 +27,7 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
     - cloud_fn (optional): (list of) mini-cloud binary file name(s)
     - combine_radius_logical (default is True): combine the results for each mini-cloud radius
     - combine_time_logical (default is False): combine the results for each time step (combine_radius_logical must be True)
-    - linear_detrend_logical (default is False): combine median analysis results with a median analysis applied to a linearly detrent elevation within each mini-cloud (experimental, not tested in depth)
+    - linear_detrend_logical (default is False): combine median analysis results with a median analysis applied to a linearly detrent elevation within each mini-cloud (experimental, not tested in depth and very slow for large datasets)
 
   output:
     - creek: array of shape (n, m) with boolean (1 is creek, 0 is not) - m is number of radius considered - creek shape is (n) if only one radius
@@ -209,6 +209,10 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
     else:
       creek.append(tmp_1 + tmp_2)
 
+
+  # no list if only one variable
+  if nr == 1:
+    creek = creek[0]
 
   # return boolean creek
   return creek
