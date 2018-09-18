@@ -1,3 +1,5 @@
+# author: O. Gourgue (University of Antwerp, Belgium)
+
 import numpy as np
 
 
@@ -6,15 +8,15 @@ import numpy as np
 def compute_mini_cloud(x, y, tri):
 
   """
-  computes mini-cloud of each node of a trinagular grid, as the list of all neighboring nodes sharing at least one triangle with it
+  compute mini-cloud of each node of a trinagular grid, as the list of all neighboring nodes sharing at least one triangle with it
 
   input:
-  x: array of shape (n)
-  y: array of shape (n)
-  tri: array of shape (m, 3)
+    - x: array of shape (n) with x-coordinates of grid nodes
+    - y: array of shape (n) with y-coordinates of grid nodes
+    - tri: array of shape (m, 3) with connectivity table of grid triangles
 
   output:
-  cloud: list of n sub-lists (each sub-list has differents lengths)
+    - cloud: list of n arrays of different shapes with mini-cloud node ids
   """
 
   # number of triangles
@@ -22,6 +24,16 @@ def compute_mini_cloud(x, y, tri):
 
   # number of nodes
   nnode = len(x)
+
+  # integer type
+  if nnode <= 127:
+    dtype = np.int8
+  elif nnode <= 32767:
+    dtype = np.int16
+  elif nnode <= 2147483647:
+    dtype = np.int32
+  else:
+    dtype = np.int64
 
   # initialize list of mini-clouds
   cloud = [None] * nnode
@@ -41,6 +53,10 @@ def compute_mini_cloud(x, y, tri):
         if j not in cloud[k]:
           cloud[k].append(j)
 
+  # for each node
+  for i in range(nnode):
+    cloud[i] = np.array(cloud[i], dtype = dtype)
+
   return cloud
 
 
@@ -49,16 +65,16 @@ def compute_mini_cloud(x, y, tri):
 def compute_mini_cloud_radius(x, y, r, nmax = None):
 
   """
-  computes mini-cloud of each node of a trinagular grid, as the list of all nodes in a certain radius
+  compute mini-cloud of each node of a trinagular grid, as the list of all nodes in a certain radius
 
   input:
-  x: array of shape (n)
-  y: array of shape (n)
-  tri: array of shape (m, 3)
-  nmax: maximum number of nodes per mini-cloud (random selection if necessary)
+    - x: array of shape (n) with x-coordinates grid nodes
+    - y: array of shape (n) with y-coordinates grid nodes
+    - tri: array of shape (m, 3) with connectivity table of grid triangles
+    - nmax: maximum number of nodes per mini-cloud (random selection if necessary)
 
   output:
-  cloud: list of n sub-lists (each sub-list has differents lengths)
+    - cloud: list of n arrays of different shapes with mini-cloud node ids
   """
 
   # number of nodes
@@ -113,8 +129,8 @@ def export_mini_cloud(cloud, filename):
   export list of mini-clouds
 
   input:
-  cloud: list of n sub-lists (each sub-list has differents lengths)
-  filename: binary file name
+    - cloud: list of n arrays with mini-cloud node ids
+    - filename: binary file name
   """
 
   # number of mini-clouds
@@ -157,8 +173,10 @@ def import_mini_cloud(filename):
   import list of mini-clouds
 
   input:
-  cloud: list of n sub-lists (each sub-list has differents lengths)
-  filename: binary file name
+    - filename: binary file name
+
+  output:
+    - cloud: list of n arrays with mini-cloud node ids
   """
 
   # open file
