@@ -102,14 +102,14 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
 
       # or compute & export mini-cloud
       else:
-        cloud = mc.compute_mini_cloud_radius(x, y, r)
+        cloud = mc.compute_mini_cloud_radius(x, y, radius[i])
         mc.export_mini_cloud(cloud, cloud_fn[i])
 
     # if list of mini-cloud file names is not given
     elif cloud_fn is None:
 
       # compute mini-cloud
-      cloud = mc.compute_mini_cloud_radius(x, y, r)
+      cloud = mc.compute_mini_cloud_radius(x, y, radius[i])
 
     # if list of radius is not given
     elif radius is None:
