@@ -16,13 +16,11 @@ def projection_p1(x, y, tri, X, Y, F):
   tri: array of shape (m, 3)
   X: array of shape (N)
   Y: array of shape (N)
-  F: array of shape (N)
+  F: array of shape (N, M)
 
   output:
-  f: array of shape (n)
+  f: array of shape (n, M)
   """
-
-  # test input data
 
   # number of triangles
   ntri = len(tri)
@@ -32,6 +30,13 @@ def projection_p1(x, y, tri, X, Y, F):
 
   # number of data points to project
   ndata = len(X)
+
+  # extent F to two dimensions if needed
+  if F.ndim == 1:
+    F = np.reshape(F, (F.shape[0], 1))
+
+  # second dimension of F
+  nt = F.shape[1]
 
   # initialization (lil matrix for sparse matrix fast building)
   a = sp.lil_matrix((ndata, nnode), dtype = float)
@@ -56,7 +61,7 @@ def projection_p1(x, y, tri, X, Y, F):
                         (Y >= ymin) * (Y <= ymax))[0])
     Xi = X[ind]
     Yi = Y[ind]
-    Fi = F[ind]
+    Fi = F[ind, :]
 
     # barycentric coordinates of remaining data points
     s1 = ((y1 - y2) * (Xi - x2) + (x2 - x1) * (Yi - y2)) / \
@@ -70,7 +75,7 @@ def projection_p1(x, y, tri, X, Y, F):
     ind = list(np.array(ind)[ind_])
     Xi = X[ind]
     Yi = Y[ind]
-    Fi = F[ind]
+    Fi = F[ind, :]
 
     # data point coordinates in the parent element
     xi  = ((Xi - x0) * (y2 - y0) - (Yi - y0) * (x2 - x0)) / \
@@ -93,7 +98,12 @@ def projection_p1(x, y, tri, X, Y, F):
   a = sp.csr_matrix(a)
 
   # solve system
-  f = spl.lsqr(a, F)[0]
+  f = np.zeros((nnode, nt))
+  for j in range(nt):
+    f[:, j], _, _, _, _, _, _, _, _, _ = spl.lsqr(a, F[:, j])
 
   # return projection
-  return f
+  if nt == 1:
+    return f[:, 0]
+  else:
+    return f
