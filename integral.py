@@ -15,8 +15,8 @@ def integral_p1(x, y, v, tri, mask = None, div_logical = False):
     - y: array of shape (n) with y-coordinates of grid nodes
     - v: array of shape (n, m) with field value at grid nodes (axis 0) and different time step (axis 1) - array of shape (n) if only 1 time step
     - tri: array of shape (p, 3) with connectivity table of grid triangles
-    - mask: logical array of shape (n) - true where integral must be computed
-    -  div_logical: integral divided by surface if true
+    - mask: logical array of shape (n) or (n, m) - true where integral must be computed
+    - div_logical: integral divided by surface if true
 
   output:
     - v_int: integral of v over the entire domain
@@ -47,7 +47,7 @@ def integral_p1(x, y, v, tri, mask = None, div_logical = False):
 
   # apply mask
   if mask is not None:
-    if v.ndim == 1:
+    if v.ndim == mask.ndim:
       tmp = v * mask
     else:
       tmp = v * np.reshape(mask, (nnode, 1))
@@ -70,8 +70,11 @@ def integral_p1(x, y, v, tri, mask = None, div_logical = False):
   if div_logical:
     if mask is None:
       s_tot = np.sum(s)
-    else:
+    elif mask.ndim == 1:
       s_tot = np.sum(s * np.mean(mask[tri]))
+    else:
+      s_tot = np.sum(np.reshape(s, (ntri, 1)) * np.mean(mask[tri], axis = 1), \
+                     axis = 0)
     v_int /= s_tot
 
   # return value
