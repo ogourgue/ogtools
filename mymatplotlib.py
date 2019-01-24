@@ -6,9 +6,9 @@ def mycolorbar(mappable, label = None, nticks = 0, orientation = 'vertical'):
   fig = ax.figure
   divider = make_axes_locatable(ax)
   if orientation is 'vertical':
-    cax = divider.append_axes("right", size = "5%", pad = 0.05)
+    cax = divider.append_axes("right", size = "5%", pad = .05)
   elif orientation is 'horizontal':
-    cax = divider.append_axes("bottom", size = "5%", pad = 0.05)
+    cax = divider.append_axes("bottom", size = "5%", pad = .05)
 
   if label is None:
     cb = fig.colorbar(mappable, cax = cax, orientation = orientation)

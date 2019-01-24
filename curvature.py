@@ -68,22 +68,22 @@ def curvature_p1(x, y, f, tri, cloud = None, type = 'gaussian'):
     a[:, 2] = xcloud * ycloud
     a[:, 3] = xcloud
     a[:, 4] = ycloud
-    a[:, 5] = 1.
+    a[:, 5] = 1
     b[:] = fcloud
 
     # solve linear system
     coef, _, _, _ = scipy.linalg.lstsq(a, b, lapack_driver = 'gelsy')
 
     # first and second derivatives
-    fx = 2. * coef[0] * x[i] + coef[2] * y[i] + coef[3]
-    fy = 2. * coef[1] * y[i] + coef[2] * x[i] + coef[4]
-    fxx = 2. * coef[0]
-    fyy = 2. * coef[1]
+    fx = 2 * coef[0] * x[i] + coef[2] * y[i] + coef[3]
+    fy = 2 * coef[1] * y[i] + coef[2] * x[i] + coef[4]
+    fxx = 2 * coef[0]
+    fyy = 2 * coef[1]
     fxy = coef[2]
 
     # compute curvature
     if type == 'gaussian':
-      k[i] = (fxx * fyy - fxy * fxy) / (1. + fx * fx + fy * fy) ** 2.
+      k[i] = (fxx * fyy - fxy * fxy) / (1 + fx * fx + fy * fy) ** 2
     elif type == 'laplacian':
       k[i] = fxx + fyy
 
@@ -179,10 +179,10 @@ def curvature_p1_contour(x, y, f, tri):
     # contour integral edge 12
     r[i1] += .5 * d12 * (f0 * (n12x * phi0x + n12y * phi0y) + \
                          f1 * (n12x * phi1x + n12y * phi1y) + \
-                         f2 * (n12x * phi2x + n12y * phi2y)) / np.sqrt(2.)
+                         f2 * (n12x * phi2x + n12y * phi2y)) / np.sqrt(2)
     r[i2] += .5 * d12 * (f0 * (n12x * phi0x + n12y * phi0y) + \
                          f1 * (n12x * phi1x + n12y * phi1y) + \
-                         f2 * (n12x * phi2x + n12y * phi2y)) / np.sqrt(2.)
+                         f2 * (n12x * phi2x + n12y * phi2y)) / np.sqrt(2)
 
     # contour integral edge 20
     r[i2] += .5 * d20 * (f0 * (n20x * phi0x + n20y * phi0y) + \

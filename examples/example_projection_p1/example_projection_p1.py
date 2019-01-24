@@ -19,7 +19,7 @@ f = np.exp(-(x * x + y * y))
 
 # figure analytical
 plt.figure()
-plt.tripcolor(x, y, tri, f, vmin = .65, vmax = 1.)
+plt.tripcolor(x, y, tri, f, vmin = .65, vmax = 1)
 plt.colorbar()
 plt.axis('scaled')
 plt.savefig('data_analytical.png', dpi = 300)
@@ -30,7 +30,7 @@ f = projection_p1(x, y, tri, X, Y, F)
 
 # figure projection
 plt.figure()
-plt.tripcolor(x, y, tri, f, vmin = .65, vmax = 1.)
+plt.tripcolor(x, y, tri, f, vmin = .65, vmax = 1)
 plt.colorbar()
 plt.axis('scaled')
 plt.savefig('data_projection.png', dpi = 300)

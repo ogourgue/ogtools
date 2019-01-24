@@ -8,7 +8,7 @@ import scipy.sparse.linalg as spl
 def projection_p1(x, y, tri, X, Y, F):
 
   """
-  project the data F(X, Y) on a P1 finite element field on the grid defined by x, y (tria ngle vertex coordinates) and tri (connectivity table)
+  project the data F(X, Y) on a P1 finite element field on the grid defined by x, y (triangle vertex coordinates) and tri (connectivity table)
 
   input:
   x: array of shape (n)

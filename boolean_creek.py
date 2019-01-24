@@ -55,15 +55,15 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
   # check optional input
   if radius is not None and cloud_fn is not None:
     if len(radius) is not len(cloud_fn):
-      print 'number of radius must the same as number cloud_fn'
+      print('number of radius must the same as number cloud_fn')
       sys.exit()
   if radius is None and cloud_fn is None:
-    print 'radius or cloud_fn must be defined (both also accepted)'
+    print('radius or cloud_fn must be defined (both also accepted)')
     sys.exit()
 
   # check combine options
   if combine_time_logical and not combine_radius_logical:
-    print 'combined in radius is mandatory if combined in time'
+    print('combined in radius is mandatory if combined in time')
     sys.exit()
 
   # number of nodes
@@ -169,7 +169,7 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
         # build linear system
         a[:, 0] = xcloud
         a[:, 1] = ycloud
-        a[:, 2] = 1.
+        a[:, 2] = 1
         b[:] = zcloud
 
         # solve linear system
