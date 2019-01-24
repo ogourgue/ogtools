@@ -8,18 +8,18 @@ import ppmodules.selafin_io_pp as pps
 
 ################################################################################
 
-class Telemac(object):
+class Selafin(object):
 
   def __init__(self, filename):
 
     """
-    object to import and export Telemac (selafin) geometry/output files
+    object to import and export selafin files
     example:
 
-    from read_write_telemac import Telemac
-    tel = Telemac(filename)
-    tel.import_header()
-    v = tel.impor_data()
+    from myselafin import Selafin
+    slf = Selafin(filename)
+    slf.import_header()
+    v = slf.impor_data()
 
     """
 
@@ -35,7 +35,7 @@ class Telemac(object):
   def import_header(self):
 
     """
-    import header of telemac file
+    import header of selafin file
     class attributes:
       - times: list of time steps
       - vnames: list of variable names
@@ -85,7 +85,7 @@ class Telemac(object):
   def import_data(self, vname = None, step = None):
 
     """
-    import data of telemac file
+    import data of selafin file
     input:
       - vname: (list of) variable name(s)
       - step: (list of) time step(s) - step = -1 for last time step
@@ -116,7 +116,7 @@ class Telemac(object):
     # indices of variables to keep
     vid = []
     for i in range(nv):
-      vid.append(map(str.strip, vnames).index(vname[i].strip()))
+      vid.append(list(map(str.strip, vnames)).index(vname[i].strip()))
     vid = np.array(vid)
 
     # time steps
@@ -162,7 +162,7 @@ class Telemac(object):
                     ndp = 3, float_type = 'f', float_size = 4):
 
     """
-    export header in telemac file
+    export header in selafin file
     input:
       - vnames: list of variable names
       - vunits: list of variable units
@@ -236,7 +236,7 @@ class Telemac(object):
 
     # check number of variables
     if nv != len(vnames) or nv != len(vunits) or len(vnames) != len(vunits):
-      print 'number of variables do not match in v, vnames and vunits'
+      print('number of variables do not match in v, vnames and vunits')
       sys.exit()
 
     # number of time steps
@@ -247,11 +247,11 @@ class Telemac(object):
     # check number of time steps
     if nv == 1:
       if (nt == 1 and v.ndim > 1) or (nt > 1 and v.shape[1] != nt):
-        print 'number of time steps do not match in times and v'
+        print('number of time steps do not match in times and v')
         sys.exit()
     else:
       if (nt == 1 and v[0].ndim > 1) or (nt > 1 and v[0].shape[1] != nt):
-        print 'number of time steps do not match in times and v'
+        print('number of time steps do not match in times and v')
         sys.exit()
 
     # reshape data
