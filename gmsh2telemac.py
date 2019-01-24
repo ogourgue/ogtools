@@ -1,8 +1,11 @@
 import numpy as np
+
+# pputils-v1.07
 import ppmodules.selafin_io_pp as pps
 
 
-def convert(msh_fn, slf_fn, cli_fn, bc = {}):
+
+def convert(msh_fn, slf_fn, cli_fn = None, bc = {}):
 
   # read gmsh file
   x, y, ikle, bnd, physical = load_msh(msh_fn)
@@ -20,13 +23,24 @@ def convert(msh_fn, slf_fn, cli_fn, bc = {}):
   slf.close()
 
   # write telemac boundary condition file
-  write_cli(cli_fn, ipobo, bnd, physical, bc)
+  if cli_fn is not None:
+    write_cli(cli_fn, ipobo, bnd, physical, bc)
+
 
 
 def load_msh(filename):
 
   # read file
   lines = [line.rstrip('\n') for line in open(filename)]
+
+  # mesh format
+  i = lines.index('$MeshFormat')
+  if int(lines[i + 1][0]) != 2:
+    print()
+    print('error in ogtools/gmsh2telemac.py:')
+    print('error in load_msh: gmsh mesh file format must be version 2')
+    print()
+    sys.exit()
 
   # physical names (boundaries)
   i = lines.index('$PhysicalNames')
@@ -85,11 +99,12 @@ def load_msh(filename):
   return x, y, ikle, bnd, physical
 
 
+
 def generate_ipobo(x, y, bnd):
 
-  # --------------------------------------------------- #
+  #######################################################
   # !!! not tested for meshes with inner boundaries !!! #
-  # --------------------------------------------------- #
+  #######################################################
 
   ipobo = np.zeros(x.shape, dtype = int)
 
@@ -128,6 +143,7 @@ def generate_ipobo(x, y, bnd):
   return ipobo
 
 
+
 def write_cli(filename, ipobo, bnd, physical, bc):
 
   lihbor = np.zeros(np.max(ipobo))
@@ -164,16 +180,16 @@ def write_cli(filename, ipobo, bnd, physical, bc):
     lihbor[bnd_ids - 1] = bc[key][0]
     liubor[bnd_ids - 1] = bc[key][1]
     livbor[bnd_ids - 1] = bc[key][2]
-    hbor[bnd_ids - 1]   = bc[key][3]
-    ubor[bnd_ids - 1]   = bc[key][4]
-    vbor[bnd_ids - 1]   = bc[key][5]
-    aubor[bnd_ids - 1]  = bc[key][6]
+    hbor[bnd_ids - 1] = bc[key][3]
+    ubor[bnd_ids - 1] = bc[key][4]
+    vbor[bnd_ids - 1] = bc[key][5]
+    aubor[bnd_ids - 1] = bc[key][6]
     litbor[bnd_ids - 1] = bc[key][7]
-    tbor[bnd_ids - 1]   = bc[key][8]
-    atbor[bnd_ids - 1]  = bc[key][9]
-    btbor[bnd_ids - 1]  = bc[key][10]
-    n[bnd_ids - 1]      = global_ids + 1
-    k[bnd_ids - 1]      = bnd_ids
+    tbor[bnd_ids - 1] = bc[key][8]
+    atbor[bnd_ids - 1] = bc[key][9]
+    btbor[bnd_ids - 1] = bc[key][10]
+    n[bnd_ids - 1] = global_ids + 1
+    k[bnd_ids - 1] = bnd_ids
 
   # write file
   cli = open(filename, 'w')
@@ -181,6 +197,8 @@ def write_cli(filename, ipobo, bnd, physical, bc):
     cli.write('%d %d %d %g %g %g %g %d %g %g %g %d %d \n' % \
               (lihbor[i], liubor[i], livbor[i], hbor[i], ubor[i], vbor[i], \
                aubor[i], litbor[i], tbor[i], atbor[i], btbor[i], n[i], k[i]))
+
+
 
 def isclockwise(x, y):
 
