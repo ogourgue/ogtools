@@ -5,6 +5,8 @@ import scipy.sparse as sp
 import scipy.sparse.linalg as spl
 
 
+################################################################################
+
 def projection_p1(x, y, tri, X, Y, F):
 
   """
@@ -107,3 +109,59 @@ def projection_p1(x, y, tri, X, Y, F):
     return f[:, 0]
   else:
     return f
+
+################################################################################
+
+def projection_q0(x, y, X, Y, F):
+
+  """
+  project the data F(X, Y) on a structured rectangular grid defined by x and y (coordinates of the rectangle vertices); data are projected on the center of the rectangle cells
+
+  input:
+  x: array of shape (nx + 1)
+  y: array of shape (ny + 1)
+  X: array of shape (N)
+  Y: array of shape (N)
+  F: array of shape (N, M)
+
+  output:
+  f: array of shape (nx, ny, M)
+  """
+
+  # grid dimensions
+  nx = len(x) - 1
+  ny = len(y) - 1
+
+  # extent F to two dimensions if needed
+  if F.ndim == 1:
+    F = np.reshape(F, (F.shape[0], 1))
+
+  # second dimension of F
+  nt = F.shape[1]
+
+  # initialize
+  f = np.zeros((nx, ny, nt))
+
+  # for each structured grid cell
+  for i in range(nx):
+    for j in range(ny):
+
+      # vertex coordinates
+      xmin = x[i]
+      ymin = y[j]
+      xmax = x[i + 1]
+      ymax = y[j + 1]
+
+      # data inside the rectangle
+      ind = list(np.where((X >= xmin) * (X <= xmax) * \
+                          (Y >= ymin) * (Y <= ymax))[0])
+      f[i, j, :] = np.mean(F[ind, :], axis = 0)
+
+  # return projection
+  if nt == 1:
+    return f[:, :, 0]
+  else:
+    return f
+
+
+
