@@ -1,4 +1,12 @@
-# author: O. Gourgue (University of Antwerp, Belgium)
+""" Boolean Creek
+
+This module allows to extract tidal creeks from elevation maps, based on median neighborhood analysis - inspired by first step of multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
 
 import numpy as np
 import os
@@ -8,6 +16,9 @@ import sys
 import mini_cloud as mc
 
 
+
+################################################################################
+# compute boolean creek ########################################################
 ################################################################################
 
 def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
@@ -15,22 +26,23 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
                           combine_time_logical = False, \
                           linear_detrend_logical = False):
 
-  """
-  extract tidal creek from elevation maps, based on median neighborhood analysis - inspired by first step of multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
+  """ Extract tidal creeks from elevation maps, based on median neighborhood analysis - inspired by first step of multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
 
-  input:
-    - x: array of shape (n) with x-coordinates of grid nodes
-    - y: array of shape (n) with y-coordinates of grid nodes
-    - z: array of shape (n, m) with bottome elevation at grid nodes (axis 0) and different time steps (axis 1)
-    - hc: threshold residual (median(z) - z) above which node is considered as creek
-    - radius (optional): (list of) mini-cloud radii(-us)
-    - cloud_fn (optional): (list of) mini-cloud binary file name(s)
-    - combine_radius_logical (default is True): combine the results for each mini-cloud radius
-    - combine_time_logical (default is False): combine the results for each time step (combine_radius_logical must be True)
-    - linear_detrend_logical (default is False): combine median analysis results with a median analysis applied to a linearly detrent elevation within each mini-cloud (experimental, not tested in depth and very slow for large datasets)
+  Required parameters:
+  x, y (NumPy arrays of size (n)): grid node coordinates
+  z (NumPy array of size (n) or (n, m): bottom elevation at grid nodes (axis 0) and different time steps (axis 1)
+  hc (float): threshold residual (median(z) - z) above which the node is considered as within a creek
 
-  output:
-    - creek: array of shape (n, m) with boolean (1 is creek, 0 is not) - m is number of radius considered - creek shape is (n) if only one radius
+  Optional parameters:
+  radius (float or list of p floats): mini-cloud radius(-ii)
+  cloud_fn (file name or list of file names): mini-cloud binary file name(s)
+  combine_radius_logical (boolean, default = True): if True, combine the results for each mini-cloud radius
+  combine_time_logical (boolean, default = False): if True, combine the results for each time step (combine_radius_logical must be True)
+  linear_detrend_logical (boolean, default = False): combine median analysis results with a median analysis applied to a linearly detrend elevation within each mini-cloud (experimental, not tested in depth and very slow for large datasets)
+
+  Returns:
+  NumPy array of size (n) or (n, p) and type logical: True if creek, False otherwise
+
   """
 
 

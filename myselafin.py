@@ -1,20 +1,32 @@
-# author: O. Gourgue (University of Antwerp, Belgium)
+""" My Selafin
+
+This module allows to import and export Telemac geometry files (aka Selafin files)
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
 
 import numpy as np
 import sys
 
-import ppmodules.selafin_io_pp as pps
+# pputils-v1.07
+import ppmodules.Selafin_io_pp as pps
 
 
+
+################################################################################
+# Selafin ######################################################################
 ################################################################################
 
 class Selafin(object):
 
   def __init__(self, filename):
 
-    """
-    object to import and export selafin files
-    example:
+    """ Object to import and export Selafin files
+
+    Example:
 
     from myselafin import Selafin
     slf = Selafin(filename)
@@ -30,25 +42,29 @@ class Selafin(object):
     self.slf = slf
 
 
+
+  ############################################################################
+  # import header ############################################################
   ############################################################################
 
   def import_header(self):
 
-    """
-    import header of selafin file
-    class attributes:
-      - times: list of time steps
-      - vnames: list of variable names
-      - vunits: list of variable units
-      - float_type
-      - float_size
-      - nelem: number of grid triangles
-      - npoin: number of grid nodes
-      - ndp
-      - ikle: connectivity table (beware, first triangle id is 1, not 0)
-      - ipobo
-      - x: array with x-coordinates of grid nodes
-      - y: array with y-coordinates of grid nodes
+    """ Import header of a Selafin
+
+    Updated class attributes:
+    times (list of floats): time steps
+    vnames (list of strings): variable names
+    vunits (list of strings): variable units
+    float_type
+    float_size
+    nelem (integer): number of grid triangles
+    npoin (integer): number of grid nodes
+    ndp
+    ikle (NumPy array): triangle connectivity table
+      --> attention: first node index is 1 !!!
+    ipobo
+    x, y (NumPy arrays of size (npoin)): grid node coordinates
+
     """
 
     # class attributes
@@ -80,19 +96,23 @@ class Selafin(object):
     self.y = y
 
 
+
+  ############################################################################
+  # import data ##############################################################
   ############################################################################
 
   def import_data(self, vname = None, step = None):
 
-    """
-    import data of selafin file
-    input:
-      - vname: (list of) variable name(s)
-      - step: (list of) time step(s) - step = -1 for last time step
-    output:
-      - v: (list of) array(s) with data
-           --> list if several variables (each item is a different variable)
-           --> array shape = (number of grid nodes, number of time steps)
+    """ Import data of a Selafin file
+
+    Optional parameters:
+    vname (list of strings): variable name(s) to import
+    step (list of floats): time step(s)
+      --> step = -1 means last time step only
+
+    Returns:
+    (list of) NumpPy array(s) of size (npoin, nt): imported data
+
     """
 
     # class attributes
@@ -156,25 +176,29 @@ class Selafin(object):
     return v
 
 
+
+  ############################################################################
+  # export header ############################################################
   ############################################################################
 
   def export_header(self, vnames, vunits, ikle, ipobo, x, y, \
                     ndp = 3, float_type = 'f', float_size = 4):
 
-    """
-    export header in selafin file
-    input:
-      - vnames: list of variable names
-      - vunits: list of variable units
-      - nelem: number of grid triangles
-      - npoin: number of grid nodes
-      - ikle: connectivity table (beware, first triangle id is 1, not 0)
-      - ipobo
-      - x: array with x-coordinates of grid nodes
-      - y: array with y-coordinates of grid nodes
-      - float_type (optional)
-      - float_size (optional)
-      - ndp (optional)
+    """ Export header in a Selafin file
+
+    Required parameters:
+    vnames (list of strings): variable names
+    vunits (list of strings): variable units
+    ikle (NumPy array): triangle connectivity table
+      --> attention: first node index is 1 !!!
+    ipobo
+    x, y (NumPy arrays of size (npoin)): grid node coordinates
+
+    Optional parameters:
+    ndp (default = 3)
+    float_type (default = 'f')
+    float_size (default = 4)
+
     """
 
     # class attributes
@@ -209,17 +233,20 @@ class Selafin(object):
     self.y = y
 
 
+
+  ############################################################################
+  # export data ##############################################################
   ############################################################################
 
   def export_data(self, times, v):
 
-    """
-    export data in telemac file
-    input:
-      - times: (list of) time step(s)
-      - v: (list of) array(s) with data
-           --> list if several variables (each item is a different variable)
-           --> array shape = (number of grid nodes, number of time steps)
+    """ Export data in a Selafin file
+
+    Required parameters:
+    times (list of floats): time steps
+    v ((list of) NumPy array(s) of size (npoin) or (npoin, nt)): data to export
+      --> list if several variables (each item is a different variable)
+
     """
 
     # class attributes
@@ -268,6 +295,10 @@ class Selafin(object):
 
 
   ############################################################################
+  # close ####################################################################
+  ############################################################################
+
+  """ Close a Selafin file """
 
   def close(self):
 

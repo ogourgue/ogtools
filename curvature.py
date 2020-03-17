@@ -1,4 +1,12 @@
-# author: O. Gourgue (University of Antwerp, Belgium)
+""" Curvature
+
+This module allows to calculate the local curvature of a P1 finite element field, based on local quadratic approximation
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
 
 import numpy as np
 import scipy.linalg
@@ -6,28 +14,29 @@ import scipy.linalg
 from mini_cloud import compute_mini_cloud
 
 
+
+################################################################################
+# curvature p1  ################################################################
 ################################################################################
 
 def curvature_p1(x, y, f, tri, cloud = None, type = 'gaussian'):
 
-  """
-  calculate the local curvature of the P1 finite element field f(x, y) on the grid defined by x, y (triangle vertex coordinates) and tri (connectivity table), based on calculation of local quadratic approximation
+  """ Calculate the local curvature of a P1 finite element field, based on calculation of local quadratic approximation
 
-  input:
-  x: array of shape (n)
-  y: array of shape (n)
-  f: array of shape (n)
-  tri: array of shape (m, 3)
+  Required parameters:
+  x, y (NumPy arrays of size (n)): grid node coordinates
+  f (NumPy array of size (n)): field values
+  tri (NumPy array of size (m, 3)): triangle connectivity table
 
-  # input (not mandatory):
-  cloud: list of n mini-cloud sub-lists (each sub-list has differents lengths)
-         default is None
-  type: 'gaussian' --> r = (fxx * fyy - fxy ** 2) / (1 + fx ** 2 + fy ** 2) ** 2
-        'laplacian' --> r = fxx + fyy
-        default is gaussian
+  Optional parameters:
+  cloud (list of mini-cloud sub-lists)
+  type (string, default = 'gaussian'): type of curvature
+    'gaussian' --> r = (fxx * fyy - fxy ** 2) / (1 + fx ** 2 + fy ** 2) ** 2
+    'laplacian' --> r = fxx + fyy
 
-  output:
-  r: array of shape (n)
+  Returns
+  NumPy array of size (n)
+
   """
 
   # number of triangles
@@ -92,26 +101,19 @@ def curvature_p1(x, y, f, tri, cloud = None, type = 'gaussian'):
 
 
 ################################################################################
-
-############################################
-# !!! the function below does not work !!! #
-############################################
+# curvature p1 (contour integrals) #############################################
+################################################################################
 
 def curvature_p1_contour(x, y, f, tri):
 
-  """
-  calculate the local curvature of the P1 finite element field f(x, y) on the grid defined by x, y (triangle vertex coordinates) and tri (connectivity table), based on calculation of local contour integrals
+  """ Calculate the local curvature of a P1 finite element field, based on calculation of local contour integrals
 
-  input:
-  x: array of shape (n)
-  y: array of shape (n)
-  f: array of shape (n)
-  tri: array of shape (m, 3)
+  Acknowledgments: V. Legat (Universite catholqiue de Louvain, Belgium) for giving the conceptual idea
 
-  output:
-  r: array of shape (n)
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!! This function does not work !!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  acknowledgments: V. Legat (Universite catholqiue de Louvain, Belgium) for giving the conceptual idea
   """
 
   # number of triangles

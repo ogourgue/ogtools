@@ -1,25 +1,33 @@
-# author: O. Gourgue (University of Antwerp, Belgium)
+""" Integral
+
+This module allows to calculate integrals of discrete fields
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
 
 import numpy as np
 
 
 ################################################################################
+# integral p1 ##################################################################
+################################################################################
 
 def integral_p1(x, y, v, tri, mask = None, div_logical = False):
 
-  """
-  compute integral p1-field v
+  """ Compute the integral of P1 finite element field
 
-  input:
-    - x: array of shape (n) with x-coordinates of grid nodes
-    - y: array of shape (n) with y-coordinates of grid nodes
-    - v: array of shape (n, m) with field value at grid nodes (axis 0) and different time step (axis 1) - array of shape (n) if only 1 time step
-    - tri: array of shape (p, 3) with connectivity table of grid triangles
-    - mask: logical array of shape (n) or (n, m) - true where integral must be computed
-    - div_logical: integral divided by surface if true
+  Required parameters
+  x, y (NumPy arrays of size (n)): grid node coordinates
+  v (NumPy array of size (n) or (n, m)): field values at grid nodes (axis 0) and different time steps (axis 1)
+  tri (NumPy array of size (p, 3): triangle connectivity table
+  mask (NumPy array of size (n) or (n,m) and type logical): True at grid nodes where the integral must be computed
+  div_logical (logical): if True, the integral is divided by the total surface
 
-  output:
-    - v_int: integral of v over the entire domain
+  Returns:
+  float or NumPy array of size (m): integral of v
+
   """
 
   # number of nodes

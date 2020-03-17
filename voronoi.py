@@ -1,21 +1,33 @@
+""" Voronoi
+
+This module allows to calculate the Voronoi clusters between an unstructured triangular grid and a structured rectangular grid
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
+
 import numpy as np
 
 
+
+################################################################################
+# voronoi ######################################################################
+################################################################################
+
 def voronoi(x, y, tri, X, Y):
 
-  """
-  compute the voronoi array from an unstructured triangular grid and a structured squared grid
+  """ Calculate the Voronoi clusters between an unstructured triangular grid and a structured rectangular grid
 
-  triangular grid defined by:
-    x, y: arrays of shape (npoin) giving node coordinates
-    tri: array of shape (nelem, 3) giving node connectivity table
+  x, y (NumPy arrays of size (n)): triangle grid node coordinates
+  tri (NumPy array of size (m, 3)): triangle connectivity table
+  X (NumPy array of size (nx)): center cell x-coordinates of the rectangular grid
+  Y (NumPy array of size (ny)): center cell y-coordinates of the rectangular grid
 
-  structured grid defined by:
-    X: array of size (nx) giving center cell coordinates in the x direction
-    Y: array of size (ny) giving center cell coordinates in the y direction
+  Returns:
+  NumPy array of size (nx, ny): indices of closest triangular grid node (-1 if outside the triangular grid)
 
-  return:
-    vor: array of shape (nx, ny) giving index of closest triangular grid node (-1 if outside triangular grid)
   """
 
 

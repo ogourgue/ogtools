@@ -1,27 +1,36 @@
-# author: O. Gourgue (University of Antwerp, Belgium)
+""" Projection
+
+This module allows to calculate projections of discrete fields
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
 
 import numpy as np
 import scipy.sparse as sp
 import scipy.sparse.linalg as spl
 
 
+
+################################################################################
+# projection p1 ################################################################
 ################################################################################
 
 def projection_p1(x, y, tri, X, Y, F):
 
-  """
-  project the data F(X, Y) on a P1 finite element field on the grid defined by x, y (triangle vertex coordinates) and tri (connectivity table)
+  """ Project the point cloud data on a P1 finite element field
 
-  input:
-  x: array of shape (n)
-  y: array of shape (n)
-  tri: array of shape (m, 3)
-  X: array of shape (N)
-  Y: array of shape (N)
-  F: array of shape (N, M)
+  Required parameters:
+  x, y (NumPy arrays of size (n)): triangle grid node coordinates
+  tri (NumPy array of size (m, 3)): triangle connectivity table
+  X, Y (NumPy arrays of size (N)): point cloud coordinates
+  F (NumPy array of size (N) or (N, M)): field values to project at points (axis 0) and different time steps (axis 1)
 
-  output:
-  f: array of shape (n, M)
+  Returns:
+  NumPy array of size (n) or (n, M): projected data
+
   """
 
   # number of triangles
@@ -111,21 +120,21 @@ def projection_p1(x, y, tri, X, Y, F):
     return f
 
 ################################################################################
+# projection q0 ################################################################
+################################################################################
 
 def projection_q0(x, y, X, Y, F):
 
-  """
-  project the data F(X, Y) on a structured rectangular grid defined by x and y (coordinates of the rectangle vertices); data are projected on the center of the rectangle cells
+  """ Project point cloud data on a structured rectangular grid (data are projected on the center of the rectangle cells)
 
-  input:
-  x: array of shape (nx + 1)
-  y: array of shape (ny + 1)
-  X: array of shape (N)
-  Y: array of shape (N)
-  F: array of shape (N, M)
+  Required parameters:
+  x (NumPy array of size (nx + 1)): x-coordinates of structured grid cells
+  y (NumPy array of size (ny + 1)): y-coordinates of structured grid cells
+  X, Y (NumPy arrays of size (N)): point cloud coordinates
+  F (NumPy array of size (N) or (N, M)): field values to project at points (axis 0) and different time steps (axis 1)
 
-  output:
-  f: array of shape (nx, ny, M)
+  Returns:
+  f (NumPy array of size (nx, ny) or (nx, ny, M)): projected data
   """
 
   # grid dimensions

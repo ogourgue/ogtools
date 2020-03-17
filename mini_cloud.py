@@ -1,22 +1,32 @@
-# author: O. Gourgue (University of Antwerp, Belgium)
+""" Mini Cloud
+
+This module allows to calculate mini-clouds, that is, for each point of a point cloud, the list of all their neighboring points
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
 
 import numpy as np
 
 
+
+################################################################################
+# compute mini cloud ###########################################################
 ################################################################################
 
 def compute_mini_cloud(x, y, tri):
 
-  """
-  compute mini-cloud of each node of a trinagular grid, as the list of all neighboring nodes sharing at least one triangle with it
+  """ Compute mini-cloud of each node of a trinagular grid, as the list of all neighboring nodes sharing at least one triangle with it
 
-  input:
-    - x: array of shape (n) with x-coordinates of grid nodes
-    - y: array of shape (n) with y-coordinates of grid nodes
-    - tri: array of shape (m, 3) with connectivity table of grid triangles
+  Required paramaters:
+  x, y (NumPy arrays of size (n)): grid node coordinates
+  tri (NumPy array of size (m, 3)): triangle connectivity table
 
-  output:
-    - cloud: list of n arrays of different shapes with mini-cloud node ids
+  Returns:
+  list of n arrays of different sizes: each array is a mini-cloud of node ids
+
   """
 
   # number of triangles
@@ -60,21 +70,26 @@ def compute_mini_cloud(x, y, tri):
   return cloud
 
 
+
 ################################################################################
+# compute mini cloud radius ####################################################
+################################################################################
+
 
 def compute_mini_cloud_radius(x, y, r, nmax = None):
 
-  """
-  compute mini-cloud of each node of a trinagular grid, as the list of all nodes in a certain radius
+  """ Compute mini-cloud of each point of a point cloud, as the list of all neighboring points in a certain radius
 
-  input:
-    - x: array of shape (n) with x-coordinates grid nodes
-    - y: array of shape (n) with y-coordinates grid nodes
-    - tri: array of shape (m, 3) with connectivity table of grid triangles
-    - nmax: maximum number of nodes per mini-cloud (random selection if necessary)
+  Required paramaters:
+  x, y (NumPy arrays of size (n)): grid node coordinates
+  r (float): radius defining neighborhood
 
-  output:
-    - cloud: list of n arrays of different shapes with mini-cloud node ids
+  Optional parameter:
+  nmax (integer): maximum number of nodes per mini-cloud (random selection if necessary)
+
+  Returns:
+  list of n arrays of different sizes: each array is a mini-cloud of node ids
+
   """
 
   # number of nodes
@@ -121,16 +136,19 @@ def compute_mini_cloud_radius(x, y, r, nmax = None):
   return cloud
 
 
+
+################################################################################
+# export mini cloud ############################################################
 ################################################################################
 
 def export_mini_cloud(cloud, filename):
 
-  """
-  export list of mini-clouds
+  """ Export list of mini-clouds in a binary file
 
-  input:
-    - cloud: list of n arrays with mini-cloud node ids
-    - filename: binary file name
+  Required parameters:
+  cloud (list of n arrays of different sizes): each array is a mini-cloud of node ids
+  filename (file name): binary file name
+
   """
 
   # number of mini-clouds
@@ -165,18 +183,21 @@ def export_mini_cloud(cloud, filename):
   file.close()
 
 
+
+################################################################################
+# import mini cloud ############################################################
 ################################################################################
 
 def import_mini_cloud(filename):
 
-  """
-  import list of mini-clouds
+  """ Import list of mini-clouds from a binary file
 
-  input:
-    - filename: binary file name
+  Required parameter:
+  filename (file name): binary file name
 
-  output:
-    - cloud: list of n arrays with mini-cloud node ids
+  Returns:
+  list of n arrays of different sizes: each array is a mini-cloud of node ids
+
   """
 
   # open file

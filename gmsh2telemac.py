@@ -1,3 +1,13 @@
+""" Gmsh2Telemac
+
+This module allows to convert a Gmsh mesh file into a Telemac geometry file and a Telemac boundary condition file
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
+
 import numpy as np
 import sys
 
@@ -6,7 +16,26 @@ import ppmodules.selafin_io_pp as pps
 
 
 
+################################################################################
+# convert ######################################################################
+################################################################################
+
 def convert(msh_fn, slf_fn, cli_fn = None, bc = {}):
+
+  """ Convert a Gmsh mesh file into a Telemac geometry file and a Telemac boundary condition file
+
+  Required parameters:
+  msh_fn (file name): Gmsh mesh file name
+  slf_fn (file name): Telemac geometry file name
+
+  Optional parameter:
+  cli_fn (file name): Telemac boundary condition file name
+  bc (dictionary): information to generate the boundary condition file
+    - keys are physical lines in the Gmsh mesh file corresponding to different boundary types (e.g. 'tidal', 'river', etc)
+    - values are list of numbers corresponding to the following values in Telemac: LIHBOR, LIUBOR, LIVBOR, HBOR, UBOR, VBOR, AUBOR, LITBOR, TBOR, ATBOR, BTBOR, N, K (see Telemac user manual)
+    - physical names not mentioned as dictionary key will be considered as "wall" ("no-flux") boundaries
+
+  """
 
   # read gmsh file
   x, y, ikle, bnd, physical = load_msh(msh_fn)
@@ -29,7 +58,28 @@ def convert(msh_fn, slf_fn, cli_fn = None, bc = {}):
 
 
 
+################################################################################
+# load msh #####################################################################
+################################################################################
+
 def load_msh(filename):
+
+  """ Load Gmsh mesh file
+
+  Required parameters:
+  filename (file name): Gmsh mesh file name
+
+  Returns:
+  NumPy array of size (n): grid node x-coordinate
+  NumPy array of size (n): grid node y-coordinate
+  NumPy array of size (m, 3): triangle connectivity table
+    --> attention: first node index is 1 !!!
+  NumPy array of size (p, 2): boundary segment connectivity table
+  dictionary:
+    - keys are names of physical lines in Gmsh
+    - values are tags of physical lines in Gmsh
+
+  """
 
   # read file
   lines = [line.rstrip('\n') for line in open(filename)]
@@ -101,11 +151,26 @@ def load_msh(filename):
 
 
 
+################################################################################
+# generate ipobo ###############################################################
+################################################################################
+
 def generate_ipobo(x, y, bnd):
 
-  #######################################################
-  # !!! not tested for meshes with inner boundaries !!! #
-  #######################################################
+  """ Generate ipobo array of the Telemac geometry file
+
+  Required parameters:
+  x, y (NumPy arrays of size (n)): grid node coordinates
+  bnd (NumPy array of size (p, 2)): boundary segment connectivity table of the Gmsh mesh file
+
+  Returns:
+  Numpy array of size (n): boundary node indices of the Telemac geometry file
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!! not tested for meshes with inner boundaries !!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  """
 
   ipobo = np.zeros(x.shape, dtype = int)
 
@@ -145,7 +210,28 @@ def generate_ipobo(x, y, bnd):
 
 
 
+################################################################################
+# write cli ####################################################################
+################################################################################
+
 def write_cli(filename, ipobo, bnd, physical, bc):
+
+  """ Write Telemac boundary condition file
+
+  Required parameters:
+  filename (file name): Telemac boundary condition file name
+  ipobo (Numpy array of size (n)): boundary node indices of the Telemac geometry file
+  bnd (NumPy array of size (p, 2)): boundary segment connectivity table of the Gmsh mesh file
+  physical (dictionary):
+    - keys are names of physical lines in Gmsh
+    - values are tags of physical lines in Gmsh
+  bc (dictionary): information to generate the boundary condition file
+    - keys are physical lines in the Gmsh mesh file corresponding to different boundary types (e.g. 'tidal', 'river', etc)
+    - values are list of numbers corresponding to the following values in Telemac: LIHBOR, LIUBOR, LIVBOR, HBOR, UBOR, VBOR, AUBOR, LITBOR, TBOR, ATBOR, BTBOR, N, K (see Telemac user manual)
+    - physical names not mentioned as dictionary key will be considered as "wall" ("no-flux") boundaries
+
+  """
+
 
   lihbor = np.zeros(np.max(ipobo))
   liubor = np.zeros(np.max(ipobo))
@@ -201,7 +287,22 @@ def write_cli(filename, ipobo, bnd, physical, bc):
 
 
 
+################################################################################
+# is clockwise #################################################################
+################################################################################
+
 def isclockwise(x, y):
+
+  """ Determine if a series of points is ordered clockwise or anti-clockwise
+
+  Required parameters:
+  x, y (NumPy arrays of size (n)): grid node coordinates
+
+  Returns:
+  logical: True if points oriented clockwise, False otherwise
+
+  """
+
 
   area = 0.
   for i in range(len(x)):

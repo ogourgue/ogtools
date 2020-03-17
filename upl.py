@@ -1,24 +1,33 @@
-# author: O. Gourgue
-# (University of Antwerp, Belgium & Boston University, MA, USA)
+""" UPL: Unchanneled Path Length
+
+This module allows to calculate the unchanneled path length in a watershed with a channel network
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
 
 import numpy as np
 from scipy import spatial
 
 
+
+################################################################################
+# compute upl ##################################################################
 ################################################################################
 
 def compute_upl(x, y, creek):
 
-  """
-  compute unchanneled path length from boolean creek field
+  """ Compute the unchanneled path length from a boolean creek field
 
-  input:
-    - x: array of shape (n) with x-coordinates of grid nodes
-    - y: array of shape (n) with y-coordinates of grid nodes
-    - creek: array of shape (n, m) with boolean (1 is creek, 0 is not) - m is number of time steps
+  Required parameters:
+  x, y (NumPy arrays of size (n)) grid node coordinates
+  creek (NumPy array of size (n, m) and type logical): True if creek, False otherwise (m is number of time steps)
 
-  output:
-    - upl: array of shape (n, m) with unchanneled path length - m is number of time steps
+  Returns:
+  NumPy array of shape (n, m): unchanneled path length (
+
   """
 
   # initialize

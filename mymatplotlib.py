@@ -1,6 +1,41 @@
+""" My Matplotlib
+
+This module redefines some useful matplotlib functions
+
+Author: Olivier Gourgue
+       (University of Antwerp, Belgium & Boston University, MA, USA)
+
+"""
+
+
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+
+
+
+################################################################################
+# my colorbar ##################################################################
+################################################################################
+
 def mycolorbar(mappable, label = None, nticks = 0, orientation = 'vertical'):
+
+  """ Create a custom colorbar
+
+  Required parameter:
+  mappable:
+
+  Optional parameters:
+  label:
+  nticks:
+  orientation (default = 'vertical')
+
+  Returns:
+  colorbar
+
+  """
+
+
+
 
   ax = mappable.axes
   fig = ax.figure
