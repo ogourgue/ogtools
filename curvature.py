@@ -3,7 +3,7 @@
 This module allows to calculate the local curvature of a P1 finite element field, based on local quadratic approximation
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 

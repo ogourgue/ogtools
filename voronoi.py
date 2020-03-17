@@ -3,7 +3,7 @@
 This module allows to calculate the Voronoi clusters between an unstructured triangular grid and a structured rectangular grid
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 

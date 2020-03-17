@@ -3,7 +3,7 @@
 This module allows to import and export Telemac geometry files (aka Selafin files)
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 

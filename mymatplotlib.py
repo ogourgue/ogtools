@@ -3,7 +3,7 @@
 This module redefines some useful matplotlib functions
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 

@@ -3,7 +3,7 @@
 This module allows to calculate projections of discrete fields
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 

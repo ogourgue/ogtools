@@ -1,9 +1,9 @@
 """ Boolean Creek
 
-This module allows to extract tidal creeks from elevation maps, based on median neighborhood analysis - inspired by first step of multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
+This module allows to extract tidal creeks from elevation maps, based on median neighborhood analysis, inspired by the first step of the multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 
@@ -26,7 +26,7 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
                           combine_time_logical = False, \
                           linear_detrend_logical = False):
 
-  """ Extract tidal creeks from elevation maps, based on median neighborhood analysis - inspired by first step of multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
+  """ Extract tidal creeks from elevation maps, based on median neighborhood analysis, inspired by the first step of the multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
 
   Required parameters:
   x, y (NumPy arrays of size (n)): grid node coordinates

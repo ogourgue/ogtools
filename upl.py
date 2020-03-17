@@ -3,7 +3,7 @@
 This module allows to calculate the unchanneled path length in a watershed with a channel network
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 

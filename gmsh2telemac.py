@@ -3,7 +3,7 @@
 This module allows to convert a Gmsh mesh file into a Telemac geometry file and a Telemac boundary condition file
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 

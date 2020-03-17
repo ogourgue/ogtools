@@ -3,7 +3,7 @@
 This module allows to calculate mini-clouds, that is, for each point of a point cloud, the list of all their neighboring points
 
 Author: Olivier Gourgue
-       (University of Antwerp, Belgium & Boston University, MA, USA)
+       (University of Antwerp, Belgium & Boston University, MA, United States)
 
 """
 
