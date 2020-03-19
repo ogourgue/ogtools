@@ -19,14 +19,14 @@ def integral_p1(x, y, v, tri, mask = None, div_logical = False):
   """ Compute the integral of P1 finite element field
 
   Required parameters
-  x, y (NumPy arrays of size (n)): grid node coordinates
-  v (NumPy array of size (n) or (n, m)): field values at grid nodes (axis 0) and different time steps (axis 1)
-  tri (NumPy array of size (p, 3): triangle connectivity table
-  mask (NumPy array of size (n) or (n,m) and type logical): True at grid nodes where the integral must be computed
+  x, y (NumPy arrays of shape (n)): grid node coordinates
+  v (NumPy array of shape (n) or (n, m)): field values at grid nodes (axis 0) and different time steps (axis 1)
+  tri (NumPy array of shape (p, 3): triangle connectivity table
+  mask (NumPy array of shape (n) or (n,m) and type logical): True at grid nodes where the integral must be computed
   div_logical (logical): if True, the integral is divided by the total surface
 
   Returns:
-  float or NumPy array of size (m): integral of v
+  float or NumPy array of shape (m): integral of v
 
   """
 

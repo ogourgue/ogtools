@@ -23,13 +23,13 @@ def projection_p1(x, y, tri, X, Y, F):
   """ Project the point cloud data on a P1 finite element field
 
   Required parameters:
-  x, y (NumPy arrays of size (n)): triangle grid node coordinates
-  tri (NumPy array of size (m, 3)): triangle connectivity table
-  X, Y (NumPy arrays of size (N)): point cloud coordinates
-  F (NumPy array of size (N) or (N, M)): field values to project at points (axis 0) and different time steps (axis 1)
+  x, y (NumPy arrays of shape (n)): triangle grid node coordinates
+  tri (NumPy array of shape (m, 3)): triangle connectivity table
+  X, Y (NumPy arrays of shape (N)): point cloud coordinates
+  F (NumPy array of shape (N) or (N, M)): field values to project at points (axis 0) and different time steps (axis 1)
 
   Returns:
-  NumPy array of size (n) or (n, M): projected data
+  NumPy array of shape (n) or (n, M): projected data
 
   """
 
@@ -128,13 +128,13 @@ def projection_q0(x, y, X, Y, F):
   """ Project point cloud data on a structured rectangular grid (data are projected on the center of the rectangle cells)
 
   Required parameters:
-  x (NumPy array of size (nx + 1)): x-coordinates of structured grid cells
-  y (NumPy array of size (ny + 1)): y-coordinates of structured grid cells
-  X, Y (NumPy arrays of size (N)): point cloud coordinates
-  F (NumPy array of size (N) or (N, M)): field values to project at points (axis 0) and different time steps (axis 1)
+  x (NumPy array of shape (nx + 1)): x-coordinates of structured grid cells
+  y (NumPy array of shape (ny + 1)): y-coordinates of structured grid cells
+  X, Y (NumPy arrays of shape (N)): point cloud coordinates
+  F (NumPy array of shape (N) or (N, M)): field values to project at points (axis 0) and different time steps (axis 1)
 
   Returns:
-  f (NumPy array of size (nx, ny) or (nx, ny, M)): projected data
+  f (NumPy array of shape (nx, ny) or (nx, ny, M)): projected data
   """
 
   # grid dimensions

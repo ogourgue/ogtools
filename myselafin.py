@@ -12,7 +12,7 @@ import numpy as np
 import sys
 
 # pputils-v1.07
-import ppmodules.Selafin_io_pp as pps
+import ppmodules.selafin_io_pp as pps
 
 
 
@@ -63,7 +63,7 @@ class Selafin(object):
     ikle (NumPy array): triangle connectivity table
       --> attention: first node index is 1 !!!
     ipobo
-    x, y (NumPy arrays of size (npoin)): grid node coordinates
+    x, y (NumPy arrays of shape (npoin)): grid node coordinates
 
     """
 
@@ -111,7 +111,7 @@ class Selafin(object):
       --> step = -1 means last time step only
 
     Returns:
-    (list of) NumpPy array(s) of size (npoin, nt): imported data
+    (list of) NumpPy array(s) of shape (npoin, nt): imported data
 
     """
 
@@ -192,7 +192,7 @@ class Selafin(object):
     ikle (NumPy array): triangle connectivity table
       --> attention: first node index is 1 !!!
     ipobo
-    x, y (NumPy arrays of size (npoin)): grid node coordinates
+    x, y (NumPy arrays of shape (npoin)): grid node coordinates
 
     Optional parameters:
     ndp (default = 3)
@@ -244,7 +244,7 @@ class Selafin(object):
 
     Required parameters:
     times (list of floats): time steps
-    v ((list of) NumPy array(s) of size (npoin) or (npoin, nt)): data to export
+    v ((list of) NumPy array(s) of shape (npoin) or (npoin, nt)): data to export
       --> list if several variables (each item is a different variable)
 
     """

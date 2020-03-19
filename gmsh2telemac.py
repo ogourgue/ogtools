@@ -70,11 +70,11 @@ def load_msh(filename):
   filename (file name): Gmsh mesh file name
 
   Returns:
-  NumPy array of size (n): grid node x-coordinate
-  NumPy array of size (n): grid node y-coordinate
-  NumPy array of size (m, 3): triangle connectivity table
+  NumPy array of shape (n): grid node x-coordinate
+  NumPy array of shape (n): grid node y-coordinate
+  NumPy array of shape (m, 3): triangle connectivity table
     --> attention: first node index is 1 !!!
-  NumPy array of size (p, 2): boundary segment connectivity table
+  NumPy array of shape (p, 2): boundary segment connectivity table
   dictionary:
     - keys are names of physical lines in Gmsh
     - values are tags of physical lines in Gmsh
@@ -160,11 +160,11 @@ def generate_ipobo(x, y, bnd):
   """ Generate ipobo array of the Telemac geometry file
 
   Required parameters:
-  x, y (NumPy arrays of size (n)): grid node coordinates
-  bnd (NumPy array of size (p, 2)): boundary segment connectivity table of the Gmsh mesh file
+  x, y (NumPy arrays of shape (n)): grid node coordinates
+  bnd (NumPy array of shape (p, 2)): boundary segment connectivity table of the Gmsh mesh file
 
   Returns:
-  Numpy array of size (n): boundary node indices of the Telemac geometry file
+  Numpy array of shape (n): boundary node indices of the Telemac geometry file
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !!! not tested for meshes with inner boundaries !!!
@@ -220,8 +220,8 @@ def write_cli(filename, ipobo, bnd, physical, bc):
 
   Required parameters:
   filename (file name): Telemac boundary condition file name
-  ipobo (Numpy array of size (n)): boundary node indices of the Telemac geometry file
-  bnd (NumPy array of size (p, 2)): boundary segment connectivity table of the Gmsh mesh file
+  ipobo (Numpy array of shape (n)): boundary node indices of the Telemac geometry file
+  bnd (NumPy array of shape (p, 2)): boundary segment connectivity table of the Gmsh mesh file
   physical (dictionary):
     - keys are names of physical lines in Gmsh
     - values are tags of physical lines in Gmsh
@@ -296,7 +296,7 @@ def isclockwise(x, y):
   """ Determine if a series of points is ordered clockwise or anti-clockwise
 
   Required parameters:
-  x, y (NumPy arrays of size (n)): grid node coordinates
+  x, y (NumPy arrays of shape (n)): grid node coordinates
 
   Returns:
   logical: True if points oriented clockwise, False otherwise

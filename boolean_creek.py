@@ -29,8 +29,8 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
   """ Extract tidal creeks from elevation maps, based on median neighborhood analysis, inspired by the first step of the multi-step approach by Liu et al. (2015, dx.doi.org/10.1016/j.jhydrol.2015.05.058)
 
   Required parameters:
-  x, y (NumPy arrays of size (n)): grid node coordinates
-  z (NumPy array of size (n) or (n, m): bottom elevation at grid nodes (axis 0) and different time steps (axis 1)
+  x, y (NumPy arrays of shape (n)): grid node coordinates
+  z (NumPy array of shape (n) or (n, m): bottom elevation at grid nodes (axis 0) and different time steps (axis 1)
   hc (float): threshold residual (median(z) - z) above which the node is considered as within a creek
 
   Optional parameters:
@@ -41,7 +41,7 @@ def compute_boolean_creek(x, y, z, hc, radius = None, cloud_fn = None, \
   linear_detrend_logical (boolean, default = False): combine median analysis results with a median analysis applied to a linearly detrend elevation within each mini-cloud (experimental, not tested in depth and very slow for large datasets)
 
   Returns:
-  NumPy array of size (n) or (n, p) and type logical: True if creek, False otherwise
+  NumPy array of shape (n) or (n, p) and type logical: True if creek, False otherwise
 
   """
 

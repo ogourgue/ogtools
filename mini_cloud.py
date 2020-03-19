@@ -21,11 +21,11 @@ def compute_mini_cloud(x, y, tri):
   """ Compute mini-cloud of each node of a trinagular grid, as the list of all neighboring nodes sharing at least one triangle with it
 
   Required paramaters:
-  x, y (NumPy arrays of size (n)): grid node coordinates
-  tri (NumPy array of size (m, 3)): triangle connectivity table
+  x, y (NumPy arrays of shape (n)): grid node coordinates
+  tri (NumPy array of shape (m, 3)): triangle connectivity table
 
   Returns:
-  list of n arrays of different sizes: each array is a mini-cloud of node ids
+  list of n arrays of different shapes: each array is a mini-cloud of node ids
 
   """
 
@@ -81,14 +81,14 @@ def compute_mini_cloud_radius(x, y, r, nmax = None):
   """ Compute mini-cloud of each point of a point cloud, as the list of all neighboring points in a certain radius
 
   Required paramaters:
-  x, y (NumPy arrays of size (n)): grid node coordinates
+  x, y (NumPy arrays of shape (n)): grid node coordinates
   r (float): radius defining neighborhood
 
   Optional parameter:
   nmax (integer): maximum number of nodes per mini-cloud (random selection if necessary)
 
   Returns:
-  list of n arrays of different sizes: each array is a mini-cloud of node ids
+  list of n arrays of different shapes: each array is a mini-cloud of node ids
 
   """
 
@@ -146,7 +146,7 @@ def export_mini_cloud(cloud, filename):
   """ Export list of mini-clouds in a binary file
 
   Required parameters:
-  cloud (list of n arrays of different sizes): each array is a mini-cloud of node ids
+  cloud (list of n arrays of different shapes): each array is a mini-cloud of node ids
   filename (file name): binary file name
 
   """
@@ -196,7 +196,7 @@ def import_mini_cloud(filename):
   filename (file name): binary file name
 
   Returns:
-  list of n arrays of different sizes: each array is a mini-cloud of node ids
+  list of n arrays of different shapes: each array is a mini-cloud of node ids
 
   """
 

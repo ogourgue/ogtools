@@ -22,11 +22,11 @@ def compute_upl(x, y, creek):
   """ Compute the unchanneled path length from a boolean creek field
 
   Required parameters:
-  x, y (NumPy arrays of size (n)) grid node coordinates
-  creek (NumPy array of size (n, m) and type logical): True if creek, False otherwise (m is number of time steps)
+  x, y (NumPy arrays of shape (n)) grid node coordinates
+  creek (NumPy array of shape (n, m) and type logical): True if creek, False otherwise (m is number of time steps)
 
   Returns:
-  NumPy array of shape (n, m): unchanneled path length (
+  NumPy array of shape (n, m): unchanneled path length
 
   """
 

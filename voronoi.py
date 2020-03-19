@@ -20,13 +20,13 @@ def voronoi(x, y, tri, X, Y):
 
   """ Calculate the Voronoi clusters between an unstructured triangular grid and a structured rectangular grid
 
-  x, y (NumPy arrays of size (n)): triangle grid node coordinates
-  tri (NumPy array of size (m, 3)): triangle connectivity table
-  X (NumPy array of size (nx)): center cell x-coordinates of the rectangular grid
-  Y (NumPy array of size (ny)): center cell y-coordinates of the rectangular grid
+  x, y (NumPy arrays of shape (n)): triangle grid node coordinates
+  tri (NumPy array of shape (m, 3)): triangle connectivity table
+  X (NumPy array of shape (nx)): center cell x-coordinates of the rectangular grid
+  Y (NumPy array of shape (ny)): center cell y-coordinates of the rectangular grid
 
   Returns:
-  NumPy array of size (nx, ny): indices of closest triangular grid node (-1 if outside the triangular grid)
+  NumPy array of shape (nx, ny): indices of closest triangular grid node (-1 if outside the triangular grid)
 
   """
 

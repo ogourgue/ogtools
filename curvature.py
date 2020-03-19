@@ -24,9 +24,9 @@ def curvature_p1(x, y, f, tri, cloud = None, type = 'gaussian'):
   """ Calculate the local curvature of a P1 finite element field, based on calculation of local quadratic approximation
 
   Required parameters:
-  x, y (NumPy arrays of size (n)): grid node coordinates
-  f (NumPy array of size (n)): field values
-  tri (NumPy array of size (m, 3)): triangle connectivity table
+  x, y (NumPy arrays of shape (n)): grid node coordinates
+  f (NumPy array of shape (n)): field values
+  tri (NumPy array of shape (m, 3)): triangle connectivity table
 
   Optional parameters:
   cloud (list of mini-cloud sub-lists)
@@ -35,7 +35,7 @@ def curvature_p1(x, y, f, tri, cloud = None, type = 'gaussian'):
     'laplacian' --> r = fxx + fyy
 
   Returns
-  NumPy array of size (n)
+  NumPy array of shape (n)
 
   """
 
