@@ -16,7 +16,7 @@ import numpy as np
 # interpolation barycentric ####################################################
 ################################################################################
 
-def interpolation_barycentric(x, y, f, tri, X, Y, outside_value = np.nan):
+def interpolation_barycentric(x, y, f, tri, X, Y, nodata_value = np.nan):
 
   """ Interpolate a P1 finite element field on a structured grid using barycentric coordinates
 
@@ -27,7 +27,7 @@ def interpolation_barycentric(x, y, f, tri, X, Y, outside_value = np.nan):
   X, Y (NumPy arrays of shape (M) and (N)): structured grid coordinates
 
   Optional parameter:
-  outside_value (number, default = np.nan): field value outside the unstructured grid
+  nodata_value (number, default = np.nan): field value outside the unstructured grid
 
   Returns:
   NumPy array of shape (M, N): interpolated data
@@ -35,7 +35,7 @@ def interpolation_barycentric(x, y, f, tri, X, Y, outside_value = np.nan):
   """
 
   # initialize output
-  F = np.zeros((len(X), len(Y))) + outside_value
+  F = np.zeros((len(X), len(Y))) + nodata_value
 
   # for each triangle
   for i in range(tri.shape[0]):
