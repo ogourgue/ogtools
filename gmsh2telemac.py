@@ -20,7 +20,7 @@ import ppmodules.selafin_io_pp as pps
 # convert ######################################################################
 ################################################################################
 
-def convert(msh_fn, slf_fn, cli_fn = None, bc = {}):
+def convert(msh_fn, slf_fn, cli_fn = None, bc = {}, physical_to_exclude = ''):
 
   """ Convert a Gmsh mesh file into a Telemac geometry file and a Telemac boundary condition file
 
@@ -34,11 +34,21 @@ def convert(msh_fn, slf_fn, cli_fn = None, bc = {}):
     - keys are physical lines in the Gmsh mesh file corresponding to different boundary types (e.g. 'tidal', 'river', etc)
     - values are list of numbers corresponding to the following values in Telemac: LIHBOR, LIUBOR, LIVBOR, HBOR, UBOR, VBOR, AUBOR, LITBOR, TBOR, ATBOR, BTBOR, N, K (see Telemac user manual)
     - physical names not mentioned as dictionary key will be considered as "wall" ("no-flux") boundaries
+  physical_to_exclude: string or list of strings with names of physical line(s) to exclude from boundaries (e.g. inner lines)
 
   """
 
   # read gmsh file
   x, y, ikle, bnd, physical = load_msh(msh_fn)
+
+  # physical lines to exclude from bnd
+  if type(physical_to_exclude) is str:
+    physical_to_exclude = [physical_to_exclude]
+  for key in physical_to_exclude:
+    tag = physical[key] - 1
+    bnd = bnd[bnd[:, 2] != tag, :]
+
+  # generate ipobo
   ipobo = generate_ipobo(x, y, bnd)
 
   # write telemac geometry file
