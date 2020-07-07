@@ -45,8 +45,9 @@ def convert(msh_fn, slf_fn, cli_fn = None, bc = {}, physical_to_exclude = ''):
   if type(physical_to_exclude) is str:
     physical_to_exclude = [physical_to_exclude]
   for key in physical_to_exclude:
-    tag = physical[key] - 1
-    bnd = bnd[bnd[:, 2] != tag, :]
+    if key in physical.keys():
+      tag = physical[key] - 1
+      bnd = bnd[bnd[:, 2] != tag, :]
 
   # generate ipobo
   ipobo = generate_ipobo(x, y, bnd)
