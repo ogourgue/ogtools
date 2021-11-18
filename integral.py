@@ -22,7 +22,7 @@ def integral_p1(x, y, v, tri, mask = None, div_logical = False):
   x, y (NumPy arrays of shape (n)): grid node coordinates
   v (NumPy array of shape (n) or (n, m)): field values at grid nodes (axis 0) and different time steps (axis 1)
   tri (NumPy array of shape (p, 3): triangle connectivity table
-  mask (NumPy array of shape (n) or (n,m) and type logical): True at grid nodes where the integral must be computed
+  mask (NumPy array of shape (n) or (n,m) and type logical): True at grid nodes where the integral is not computed
   div_logical (logical): if True, the integral is divided by the total surface
 
   Returns:
@@ -53,12 +53,16 @@ def integral_p1(x, y, v, tri, mask = None, div_logical = False):
   # triangle surface
   s = .5 * (x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1))
 
+  # area of interest
+  if mask is not None:
+      not_mask = np.logical_not(mask)
+
   # apply mask
   if mask is not None:
     if v.ndim == mask.ndim:
-      tmp = v * mask
+      tmp = v * not_mask
     else:
-      tmp = v * np.reshape(mask, (nnode, 1))
+      tmp = v * np.reshape(not_mask, (nnode, 1))
   else:
     tmp = v
 
@@ -79,10 +83,10 @@ def integral_p1(x, y, v, tri, mask = None, div_logical = False):
     if mask is None:
       s_tot = np.sum(s)
     elif mask.ndim == 1:
-      s_tot = np.sum(s * np.mean(mask[tri]))
+      s_tot = np.sum(s * np.mean(not_mask[tri]))
     else:
-      s_tot = np.sum(np.reshape(s, (ntri, 1)) * np.mean(mask[tri], axis = 1), \
-                     axis = 0)
+      s_tot = np.sum(np.reshape(s, (ntri, 1)) *
+                     np.mean(not_mask[tri], axis = 1), axis = 0)
     v_int /= s_tot
 
   # return value
