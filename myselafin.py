@@ -144,7 +144,7 @@ class Selafin(object):
       step = range(len(times))
     elif step == -1:
       step = [len(times) - 1]
-    elif type(step) is int:
+    elif type(step) in [int, np.int64]:
       step = [step]
 
     # number of time steps
